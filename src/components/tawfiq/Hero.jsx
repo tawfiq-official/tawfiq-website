@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
 // Hero — keep the visual language (warm light, hairlines, serif, device).
@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 // The device shows ONE meaningful workflow (the Qaza journey) rather than a dashboard.
 
 export default function Hero() {
+  
   return (
     <section className="relative min-h-screen bg-[#F7F5F1] overflow-hidden flex items-center">
       {/* Single source of natural light — top left, like morning sun through a window */}
@@ -166,6 +167,7 @@ export default function Hero() {
             animate={{
               opacity: 1,
               y: [0, -6, 0],
+              rotate: [-1, 1, -1],
             }}
             transition={{
               opacity: {
@@ -183,20 +185,17 @@ export default function Hero() {
             className="lg:col-span-5 order-1 lg:order-2 flex justify-center lg:-ml-8"
           >
             <div className="relative w-full max-w-[325px]">
-              <div
-                className="
-      absolute
-      inset-0
-      -z-10
-      scale-125
-      rounded-full
-      blur-[90px]
-      opacity-40
-    "
-                style={{
-                  background:
-                    "radial-gradient(circle, rgba(214,193,169,0.45) 0%, rgba(247,245,241,0) 72%)",
+              <motion.div
+                animate={{
+                  scale: [1, 1.05, 1],
+                  opacity: [0.35, 0.5, 0.35],
                 }}
+                transition={{
+                  duration: 8,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+                className="absolute inset-0 ..."
               />
 
               <motion.div
@@ -250,7 +249,9 @@ export default function Hero() {
                           strokeLinecap="round"
                           strokeDasharray="339.29"
                           initial={{ strokeDashoffset: 339.29 }}
-                          animate={{ strokeDashoffset: 339.29 * (1 - 0.826) }}
+                          animate={{
+                            strokeDashoffset: [339.29, 339.29 * (1 - 0.826)],
+                          }}
                           transition={{
                             duration: 1.8,
                             delay: 1.2,
