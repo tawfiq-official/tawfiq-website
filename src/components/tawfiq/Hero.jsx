@@ -187,14 +187,14 @@ export default function Hero() {
         transition={{ duration: 1, delay: 2.2 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
       >
-        <span className="text-[10px] font-sans tracking-[0.2em] uppercase text-stone-400">
+        {/* <span className="text-[10px] font-sans tracking-[0.2em] uppercase text-stone-400">
           Scroll
-        </span>
-        <motion.span
+        </span> */}
+        {/* <motion.span
           animate={{ y: [0, 6, 0] }}
           transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
           className="w-px h-8 bg-stone-300"
-        />
+        /> */}
       </motion.div>
     </section>
   );

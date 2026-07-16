@@ -1,15 +1,27 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 60);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const handleLogoClick = (e) => {
+    if (location.pathname === "/") {
+      e.preventDefault();
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    }
+  };
 
   return (
     <motion.header
@@ -23,7 +35,11 @@ export default function Navbar() {
       }`}
     >
       <nav className="max-w-[1400px] mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2.5">
+        <Link
+          to="/"
+          onClick={handleLogoClick}
+          className="flex items-center gap-2.5 cursor-pointer"
+        >
           <svg
             width="22"
             height="22"
@@ -45,10 +61,12 @@ export default function Navbar() {
               strokeLinejoin="round"
             />
           </svg>
+
           <span className="font-serif text-xl text-stone-900 tracking-tight">
             Tawfiq
           </span>
         </Link>
+
         <div className="hidden md:flex items-center gap-10">
           {[
             { label: "Qaza", href: "#qaza" },
@@ -64,6 +82,7 @@ export default function Navbar() {
             </a>
           ))}
         </div>
+
         <a
           href="https://tawfiq-official.github.io/Tawfiq/"
           target="_blank"
@@ -71,6 +90,7 @@ export default function Navbar() {
           className="group inline-flex items-center gap-2.5 text-[13px] text-stone-900 transition-all duration-300"
         >
           <span className="w-0 group-hover:w-4 h-px bg-stone-900 transition-all duration-500" />
+
           <svg
             viewBox="0 0 24 24"
             width="15"
@@ -85,22 +105,23 @@ export default function Navbar() {
               stroke="currentColor"
               strokeWidth="1.2"
             />
-            <path
-              d="M12 5 L14.5 12 L12 14.5 L9.5 12 Z"
-              fill="currentColor"
-              stroke="none"
-            />
+
+            <path d="M12 5 L14.5 12 L12 14.5 L9.5 12 Z" fill="currentColor" />
+
             <path
               d="M12 19 L14.5 12 L12 14.5 L9.5 12 Z"
               stroke="currentColor"
               strokeWidth="1.2"
               strokeLinejoin="round"
             />
-            <circle cx="12" cy="12" r="0.7" fill="currentColor" stroke="none" />
+
+            <circle cx="12" cy="12" r="0.7" fill="currentColor" />
           </svg>
+
           <span className="font-serif text-[15px] tracking-tight">
             Begin with Bismillah
           </span>
+
           <span className="w-0 group-hover:w-4 h-px bg-stone-900 transition-all duration-500" />
         </a>
       </nav>
