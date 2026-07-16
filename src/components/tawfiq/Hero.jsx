@@ -73,15 +73,45 @@ export default function Hero() {
               className="mt-10 flex items-center gap-8"
             >
               <a
-                href="https://tawfiq.base44.app/"
+                href="https://tawfiq-official.github.io/Tawfiq/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group inline-flex items-center gap-3"
+                className="group inline-flex items-center gap-2.5 text-stone-900 transition-all duration-300"
               >
-                <span className="font-sans text-sm text-stone-900 tracking-wide">
-                  Open the app
+                <span className="w-0 group-hover:w-4 h-px bg-stone-900 transition-all duration-500" />
+
+                <svg
+                  viewBox="0 0 24 24"
+                  width="15"
+                  height="15"
+                  fill="none"
+                  className="text-stone-900"
+                >
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="9.5"
+                    stroke="currentColor"
+                    strokeWidth="1.2"
+                  />
+                  <path
+                    d="M12 5 L14.5 12 L12 14.5 L9.5 12 Z"
+                    fill="currentColor"
+                  />
+                  <path
+                    d="M12 19 L14.5 12 L12 14.5 L9.5 12 Z"
+                    stroke="currentColor"
+                    strokeWidth="1.2"
+                    strokeLinejoin="round"
+                  />
+                  <circle cx="12" cy="12" r="0.7" fill="currentColor" />
+                </svg>
+
+                <span className="font-serif text-lg tracking-tight">
+                  Begin with Bismillah
                 </span>
-                <span className="w-10 h-px bg-stone-900 group-hover:w-16 transition-all duration-500" />
+
+                <span className="w-0 group-hover:w-4 h-px bg-stone-900 transition-all duration-500" />
               </a>
             </motion.div>
           </div>
@@ -89,12 +119,39 @@ export default function Hero() {
           {/* Right — the app, showing one focused workflow: the Qaza journey to zero */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.4, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
+            animate={{
+              opacity: 1,
+              y: [0, -6, 0],
+            }}
+            transition={{
+              opacity: {
+                duration: 1.4,
+                delay: 0.4,
+              },
+              y: {
+                delay: 1.8,
+                duration: 6,
+                repeat: Infinity,
+                repeatType: "mirror",
+                ease: "easeInOut",
+              },
+            }}
             className="lg:col-span-5 order-1 lg:order-2 flex justify-center"
           >
             <div className="relative w-full max-w-[300px]">
-              <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-[80%] h-12 bg-stone-900/10 blur-2xl rounded-full" />
+              <motion.div
+                animate={{
+                  scale: [1, 0.92, 1],
+                  opacity: [0.12, 0.08, 0.12],
+                }}
+                transition={{
+                  delay: 1.8,
+                  duration: 6,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+                className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-[80%] h-12 bg-stone-900 blur-2xl rounded-full"
+              />
               <div className="relative w-full aspect-[9/19] bg-[#1a1816] rounded-[44px] p-2.5 shadow-[0_30px_80px_-20px_rgba(28,25,23,0.25)]">
                 <div className="absolute top-5 left-1/2 -translate-x-1/2 w-24 h-5 bg-[#1a1816] rounded-full z-20" />
                 <div className="w-full h-full rounded-[36px] bg-[#FBF9F5] overflow-hidden flex flex-col pt-10 pb-6 px-5 select-none">
