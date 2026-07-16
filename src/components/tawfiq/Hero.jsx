@@ -166,7 +166,7 @@ export default function Hero() {
             animate={{
               opacity: 1,
               y: [0, -6, 0],
-              rotate: [-1, 1, -1],
+              rotate: [-0.6, 0.6, -0.6],
             }}
             transition={{
               opacity: {
@@ -187,14 +187,18 @@ export default function Hero() {
               <motion.div
                 animate={{
                   scale: [1, 1.05, 1],
-                  opacity: [0.35, 0.5, 0.35],
+                  opacity: [0.18, 0.28, 0.18],
                 }}
                 transition={{
                   duration: 8,
                   repeat: Infinity,
                   ease: "easeInOut",
                 }}
-                className="absolute inset-0 ..."
+                className="absolute inset-0 -z-10 rounded-full blur-[90px]"
+                style={{
+                  background:
+                    "radial-gradient(circle, rgba(214,193,169,0.45) 0%, rgba(247,245,241,0) 72%)",
+                }}
               />
 
               <motion.div
@@ -211,6 +215,18 @@ export default function Hero() {
                 className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-[80%] h-12 bg-stone-900 blur-2xl rounded-full"
               />
               <div className="relative w-full aspect-[9/19] bg-[#1a1816] rounded-[44px] p-2.5 shadow-[0_30px_80px_-20px_rgba(28,25,23,0.25)]">
+                <motion.div
+                  animate={{
+                    x: ["-160%", "220%"],
+                  }}
+                  transition={{
+                    duration: 12,
+                    repeat: Infinity,
+                    repeatDelay: 4,
+                    ease: "easeInOut",
+                  }}
+                  className="absolute inset-y-0 left-0 w-16 bg-white/10 blur-xl rotate-[18deg] pointer-events-none z-20"
+                />
                 <div className="absolute top-5 left-1/2 -translate-x-1/2 w-24 h-5 bg-[#1a1816] rounded-full z-20" />
                 <div className="w-full h-full rounded-[36px] bg-[#FBF9F5] overflow-hidden flex flex-col pt-10 pb-6 px-5 select-none">
                   {/* Header — minimal */}
