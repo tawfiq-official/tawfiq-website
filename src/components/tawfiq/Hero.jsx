@@ -39,7 +39,7 @@ export default function Hero() {
               transition={{ duration: 1.5, delay: 0.3 }}
               className="text-[11px] font-sans tracking-[0.25em] uppercase text-stone-400 mb-8"
             >
-              بِسْمِ اللَّهِ — A companion for the consistent Muslim
+              بِسْمِ اللَّهِ — Built for consistency
             </motion.p>
             <motion.h1
               initial={{ opacity: 0, y: 30 }}
@@ -61,11 +61,10 @@ export default function Hero() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 1.5, delay: 0.7 }}
-              className="mt-8 max-w-lg text-[16px] md:text-[17px] font-sans text-stone-500 leading-relaxed font-sans text-stone-500 leading-relaxed"
+              className="mt-8 max-w-lg text-[16px] md:text-[17px] font-sans text-stone-500 leading-relaxed"
             >
-              Tawfiq brings Salah, Qaza management, Quran reading, and gentle AI
-              guidance into one calm experience — so returning feels natural,
-              never like a debt.
+              Track Qaza, strengthen your Salah, read the Quran, and return to
+              Allah through calm, intentional daily worship.
             </motion.p>
             <motion.div
               initial={{ opacity: 0 }}
