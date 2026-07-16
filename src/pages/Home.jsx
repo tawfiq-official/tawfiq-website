@@ -6,10 +6,22 @@ import Quran from "@/components/tawfiq/Quran";
 import Academy from "@/components/tawfiq/Academy";
 import SurahTaha from "@/components/tawfiq/SurahTaha";
 import Footer from "@/components/tawfiq/Footer";
+import { motion } from "framer-motion";
 
 export default function Home() {
   return (
-    <div className="bg-[#F7F5F1]">
+    <motion.main
+    initial={{
+        opacity:0
+    }}
+    animate={{
+        opacity:1
+    }}
+    transition={{
+        duration:1
+    }}
+    className="bg-[#F7F5F1]"
+>
       <Navbar />
       <Hero />
       <Qaza />
@@ -17,6 +29,6 @@ export default function Home() {
       <Academy />
       <SurahTaha />
       <Footer />
-    </div>
+    </motion.main>
   );
 }

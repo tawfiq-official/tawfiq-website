@@ -67,7 +67,17 @@ export default function Footer() {
           transition={{ duration: 1 }}
           className="mt-16"
         >
-          <p className="font-arabic text-[#6E635B] text-4xl md:text-5xl mb-4">
+          <p
+            className="
+    font-arabic
+    text-[#64584F]
+    text-4xl
+    md:text-5xl
+    mb-2
+    tracking-wide
+    translate-x-[2px]
+  "
+          >
             تَوْفِيق
           </p>
 
