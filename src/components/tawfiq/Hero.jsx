@@ -29,9 +29,9 @@ export default function Hero() {
       </div>
 
       <div className="relative max-w-[1400px] mx-auto px-6 lg:px-10 w-full pt-24 pb-16">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-2 items-center">
           {/* Left — typographic statement, now with a clear product sentence */}
-          <div className="lg:col-span-7 order-2 lg:order-1">
+          <div className="lg:col-span-7 order-2 lg:order-1 lg:pr-6">
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -48,7 +48,7 @@ export default function Hero() {
                 ease: [0.22, 1, 0.36, 1],
                 delay: 0.15,
               }}
-              className="font-serif text-[clamp(2.75rem,7.5vw,7rem)] leading-[0.98] tracking-[-0.02em] text-stone-900"
+              className="font-serif text-[clamp(3.2rem,8.5vw,7.8rem)] leading-[0.95] tracking-[-0.03em] text-stone-900"
             >
               Become consistent
               <br />
@@ -60,7 +60,7 @@ export default function Hero() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 1.5, delay: 0.7 }}
-              className="mt-8 max-w-md text-[15px] md:text-base font-sans text-stone-500 leading-relaxed"
+              className="mt-8 max-w-lg text-[16px] md:text-[17px] font-sans text-stone-500 leading-relaxed font-sans text-stone-500 leading-relaxed"
             >
               Tawfiq brings Salah, Qaza management, Quran reading, and gentle AI
               guidance into one calm experience — so returning feels natural,
@@ -180,9 +180,25 @@ export default function Hero() {
                 ease: "easeInOut",
               },
             }}
-            className="lg:col-span-5 order-1 lg:order-2 flex justify-center"
+            className="lg:col-span-5 order-1 lg:order-2 flex justify-center lg:-ml-8"
           >
-            <div className="relative w-full max-w-[300px]">
+            <div className="relative w-full max-w-[325px]">
+              <div
+                className="
+      absolute
+      inset-0
+      -z-10
+      scale-125
+      rounded-full
+      blur-[90px]
+      opacity-40
+    "
+                style={{
+                  background:
+                    "radial-gradient(circle, rgba(214,193,169,0.45) 0%, rgba(247,245,241,0) 72%)",
+                }}
+              />
+
               <motion.div
                 animate={{
                   scale: [1, 0.92, 1],
