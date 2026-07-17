@@ -47,11 +47,27 @@ export default function Hero() {
               }}
               className="font-serif text-[clamp(3.2rem,8.5vw,7.8rem)] leading-[0.95] tracking-[-0.03em] text-stone-900"
             >
-              Become consistent
-              <br />
-              <span className="italic font-light text-stone-500">
-                in your worship.
-              </span>
+              <motion.h1
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 1.2,
+                  ease: [0.22, 1, 0.36, 1],
+                  delay: 0.15,
+                }}
+                className="font-serif text-[clamp(3.2rem,8.5vw,7.8rem)] leading-[0.92] tracking-[-0.03em] text-stone-900"
+              >
+                Become
+                <br />
+                consistent.
+                <br />
+                <span className="block mt-5 text-stone-500 font-light">
+                  Stay close
+                </span>
+                <span className="italic font-light text-stone-500">
+                  to Allah.
+                </span>
+              </motion.h1>
             </motion.h1>
             <motion.p
               initial={{ opacity: 0 }}
