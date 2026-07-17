@@ -1,12 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { motion } from "framer-motion";
-
-// Hero — keep the visual language (warm light, hairlines, serif, device).
-// Improve product communication: within five seconds, understand what Tawfiq is.
-// The device shows ONE meaningful workflow (the Qaza journey) rather than a dashboard.
+import GlassOrb from "./GlassOrb";
 
 export default function Hero() {
-  
   return (
     <section className="relative min-h-screen bg-[#F7F5F1] overflow-hidden flex items-center">
       {/* Single source of natural light — top left, like morning sun through a window */}
@@ -31,8 +27,8 @@ export default function Hero() {
 
       <div className="relative max-w-[1400px] mx-auto px-6 lg:px-10 w-full pt-24 pb-16">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-2 items-center">
-          {/* Left — typographic statement, now with a clear product sentence */}
-          <div className="lg:col-span-7 order-2 lg:order-1 lg:pr-6">
+          {/* Left — Text Section (order-1 on both mobile and desktop) */}
+          <div className="lg:col-span-7 order-1 lg:order-1 lg:pr-6">
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -76,16 +72,7 @@ export default function Hero() {
                 href="https://tawfiq-official.github.io/Tawfiq/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="
-    group
-    relative
-    inline-flex
-    items-center
-    gap-3
-    py-2
-    transition-all
-    duration-500
-  "
+                className="group relative inline-flex items-center gap-3 py-2 transition-all duration-500"
               >
                 <span className="w-0 group-hover:w-5 h-px bg-stone-900 transition-all duration-500" />
 
@@ -94,13 +81,7 @@ export default function Hero() {
                   width="17"
                   height="17"
                   fill="none"
-                  className="
-      text-stone-900
-      transition-all
-      duration-500
-      group-hover:translate-x-1
-      group-hover:text-[#6B4F37]
-    "
+                  className="text-stone-900 transition-all duration-500 group-hover:translate-x-1 group-hover:text-[#6B4F37]"
                 >
                   <circle
                     cx="12"
@@ -109,50 +90,22 @@ export default function Hero() {
                     stroke="currentColor"
                     strokeWidth="1.2"
                   />
-
                   <path
                     d="M12 5 L14.5 12 L12 14.5 L9.5 12 Z"
                     fill="currentColor"
                   />
-
                   <path
                     d="M12 19 L14.5 12 L12 14.5 L9.5 12 Z"
                     stroke="currentColor"
                     strokeWidth="1.2"
                     strokeLinejoin="round"
                   />
-
                   <circle cx="12" cy="12" r="0.7" fill="currentColor" />
                 </svg>
 
-                <span
-                  className="
-      relative
-      font-serif
-      text-[20px]
-      md:text-[22px]
-      font-medium
-      tracking-tight
-      text-stone-900
-      transition-colors
-      duration-500
-      group-hover:text-[#6B4F37]
-    "
-                >
+                <span className="relative font-serif text-[20px] md:text-[22px] font-medium tracking-tight text-stone-900 transition-colors duration-500 group-hover:text-[#6B4F37]">
                   Begin with Bismillah
-                  <span
-                    className="
-        absolute
-        left-0
-        -bottom-1
-        h-[1.5px]
-        w-0
-        bg-[#6B4F37]
-        transition-all
-        duration-500
-        group-hover:w-full
-      "
-                  />
+                  <span className="absolute left-0 -bottom-1 h-[1.5px] w-0 bg-[#6B4F37] transition-all duration-500 group-hover:w-full" />
                 </span>
 
                 <span className="w-0 group-hover:w-5 h-px bg-stone-900 transition-all duration-500" />
@@ -160,7 +113,7 @@ export default function Hero() {
             </motion.div>
           </div>
 
-          {/* Right — the app, showing one focused workflow: the Qaza journey to zero */}
+          {/* Right — Glass Orb Section (order-2 on both mobile and desktop) */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{
@@ -181,154 +134,27 @@ export default function Hero() {
                 ease: "easeInOut",
               },
             }}
-            className="lg:col-span-5 order-1 lg:order-2 flex justify-center lg:-ml-8"
+            className="lg:col-span-5 order-2 lg:order-2 flex justify-center lg:-ml-8"
           >
-            <div className="relative w-full max-w-[325px]">
-              <motion.div
-                animate={{
-                  scale: [1, 1.05, 1],
-                  opacity: [0.18, 0.28, 0.18],
-                }}
-                transition={{
-                  duration: 8,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-                className="absolute inset-0 -z-10 rounded-full blur-[90px]"
-                style={{
-                  background:
-                    "radial-gradient(circle, rgba(214,193,169,0.45) 0%, rgba(247,245,241,0) 72%)",
-                }}
-              />
-
-              <motion.div
-                animate={{
-                  scale: [1, 0.92, 1],
-                  opacity: [0.12, 0.08, 0.12],
-                }}
-                transition={{
-                  delay: 1.8,
-                  duration: 6,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-                className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-[80%] h-12 bg-stone-900 blur-2xl rounded-full"
-              />
-              <div className="relative w-full aspect-[9/19] bg-[#1a1816] rounded-[44px] p-2.5 shadow-[0_30px_80px_-20px_rgba(28,25,23,0.25)]">
-                <motion.div
-                  animate={{
-                    x: ["-160%", "220%"],
-                  }}
-                  transition={{
-                    duration: 12,
-                    repeat: Infinity,
-                    repeatDelay: 4,
-                    ease: "easeInOut",
-                  }}
-                  className="absolute inset-y-0 left-0 w-16 bg-white/10 blur-xl rotate-[18deg] pointer-events-none z-20"
-                />
-                <div className="absolute top-5 left-1/2 -translate-x-1/2 w-24 h-5 bg-[#1a1816] rounded-full z-20" />
-                <div className="w-full h-full rounded-[36px] bg-[#FBF9F5] overflow-hidden flex flex-col pt-10 pb-6 px-5 select-none">
-                  {/* Header — minimal */}
-                  <div className="mb-6">
-                    <p className="text-[8px] font-sans tracking-[0.2em] uppercase text-stone-400">
-                      Qaza
-                    </p>
-                    <p className="font-serif text-lg text-stone-900 leading-none mt-1">
-                      The journey home
-                    </p>
-                  </div>
-
-                  {/* Progress ring — repayment progress, journey toward zero */}
-                  <div className="flex-1 flex flex-col items-center justify-center">
-                    <div className="relative w-32 h-32">
-                      <svg
-                        viewBox="0 0 120 120"
-                        className="w-full h-full -rotate-90"
-                      >
-                        <circle
-                          cx="60"
-                          cy="60"
-                          r="54"
-                          fill="none"
-                          stroke="#E7E2D9"
-                          strokeWidth="4"
-                        />
-                        <motion.circle
-                          cx="60"
-                          cy="60"
-                          r="54"
-                          fill="none"
-                          stroke="#b45309"
-                          strokeWidth="4"
-                          strokeLinecap="round"
-                          strokeDasharray="339.29"
-                          initial={{ strokeDashoffset: 339.29 }}
-                          animate={{
-                            strokeDashoffset: [339.29, 339.29 * (1 - 0.826)],
-                          }}
-                          transition={{
-                            duration: 1.8,
-                            delay: 1.2,
-                            ease: [0.22, 1, 0.36, 1],
-                          }}
-                        />
-                      </svg>
-                      <div className="absolute inset-0 flex flex-col items-center justify-center">
-                        <p className="font-serif text-3xl text-stone-900 leading-none tabular-nums">
-                          23
-                        </p>
-                        <p className="text-[8px] font-sans tracking-[0.15em] uppercase text-stone-400 mt-1">
-                          remaining
-                        </p>
-                      </div>
-                    </div>
-                    <p className="text-[10px] font-sans text-stone-500 mt-4 text-center leading-relaxed px-4">
-                      <span className="text-stone-800 font-medium">
-                        109 cleared.
-                      </span>
-                      <br />
-                      Walking toward zero, gently.
-                    </p>
-                  </div>
-
-                  {/* Single nudge — one meaningful action */}
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.8, delay: 2 }}
-                    className="mt-4 pt-4 border-t border-stone-200/60 text-center"
-                  >
-                    <p className="text-[8px] font-sans tracking-[0.15em] uppercase text-amber-700/80 font-semibold">
-                      Today
-                    </p>
-                    <p className="text-[11px] font-sans text-stone-600 mt-1 leading-relaxed">
-                      Complete one Qaza prayer.
-                    </p>
-                  </motion.div>
-                </div>
-              </div>
+            {/* 
+              Responsive Wrapper for the Orb 
+              Since GlassOrb is fixed at 520px, we scale it down on mobile/tablet 
+              to fit perfectly without horizontal scrolling.
+            */}
+            <div className="flex justify-center items-center w-[320px] h-[320px] sm:w-[420px] sm:h-[420px] lg:w-[520px] lg:h-[520px] scale-[0.65] sm:scale-75 lg:scale-100 origin-center">
+              <GlassOrb />
             </div>
           </motion.div>
         </div>
       </div>
 
-      {/* Scroll cue */}
+      {/* Scroll cue (Currently commented out in your design) */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1, delay: 2.2 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-      >
-        {/* <span className="text-[10px] font-sans tracking-[0.2em] uppercase text-stone-400">
-          Scroll
-        </span> */}
-        {/* <motion.span
-          animate={{ y: [0, 6, 0] }}
-          transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-          className="w-px h-8 bg-stone-300"
-        /> */}
-      </motion.div>
+      ></motion.div>
     </section>
   );
 }
