@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
-import { motion } from "framer-motion";
-import { Play, Pause } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Play, Pause, Check } from "lucide-react";
 
 // Quran — the reading experience itself, not a feature list.
 // Real, continuous recitation that plays. Tajweed highlighting, translation,
@@ -104,39 +104,112 @@ const ayahs = [
   },
 ];
 
+// Waveform component only animates when `isPlaying` is true.
+// Fixed to accept a prop to stop animation.
+const Waveform = ({ isPlaying }) => (
+  <div className="flex items-end gap-[2px] h-3">
+    {[...Array(16)].map((_, i) => (
+      <motion.div
+        key={i}
+        className="w-[1.5px] bg-[#C6A26B] rounded-full origin-bottom"
+        animate={{
+          height: isPlaying
+            ? [
+                `${Math.random() * 40 + 20}%`,
+                `${Math.random() * 60 + 40}%`,
+                "30%",
+              ]
+            : "20%", // Stop animation when not playing
+        }}
+        transition={{
+          duration: 0.8 + Math.random() * 0.5,
+          repeat: Infinity,
+          repeatType: "mirror",
+          ease: "easeInOut",
+        }}
+      />
+    ))}
+  </div>
+);
+
+// Circular progress indicator to match overall percentage.
+const CircularProgress = ({ percentage }) => {
+  const radius = 9;
+  const circumference = 2 * Math.PI * radius;
+  const strokeDashoffset = circumference - (percentage / 100) * circumference;
+
+  return (
+    <div className="relative flex items-center justify-center w-8 h-8">
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        className="rotate-[-90deg]"
+      >
+        <circle
+          cx="12"
+          cy="12"
+          r={radius}
+          fill="none"
+          stroke="#E7E5E4"
+          strokeWidth="1.5"
+        />
+        <motion.circle
+          cx="12"
+          cy="12"
+          r={radius}
+          fill="none"
+          stroke="#C6A26B"
+          strokeWidth="1.5"
+          strokeDasharray={circumference}
+          animate={{ strokeDashoffset }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          strokeLinecap="round"
+        />
+      </svg>
+      <span className="absolute text-[8px] font-sans text-stone-500 font-medium tabular-nums">
+        {Math.round(percentage)}%
+      </span>
+    </div>
+  );
+};
+
 export default function Quran() {
   const [current, setCurrent] = useState(1);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [progress, setProgress] = useState(0);
+  const [progress, setProgress] = useState(0); // Progress within current Ayah
   const [started, setStarted] = useState(false);
   const [showTranslation, setShowTranslation] = useState(true);
+  const [isComplete, setIsComplete] = useState(false); // New state to handle full completion
   const audioRef = useRef(null);
 
-  const overall = Math.min(
-    ((current - 1 + progress) / ayahs.length) * 100,
-    100,
-  );
+  // ⭐ FIX 1: Corrected calculation to hit 100% when fully complete.
+  const overallPercentage = isComplete
+    ? 100
+    : Math.min(((current - 1 + progress) / ayahs.length) * 100, 100);
 
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
-    if (isPlaying) {
+    if (isPlaying && !isComplete) {
       audio.src = ayahs[current - 1].audio;
       audio.play().catch(() => {});
     } else if (!audio.paused) {
       audio.pause();
     }
-  }, [isPlaying, current]);
+  }, [isPlaying, current, isComplete]);
 
+  // ⭐ FIX 2: Corrected audio logic to properly halt waveform on complete.
   const handleEnded = () => {
     if (current < ayahs.length) {
       setProgress(0);
       setCurrent((c) => c + 1); // isPlaying stays true → next ayah plays
     } else {
-      setIsPlaying(false);
+      // Logic for total Surah completion:
+      setIsPlaying(false); // This stops the waveform animation
+      setIsComplete(true); // This triggers the completion screen
       setStarted(false);
-      setProgress(0);
-      setCurrent(1);
+      setProgress(1); // Set current verse progress to full
     }
   };
 
@@ -146,7 +219,14 @@ export default function Quran() {
   };
 
   const toggle = () => {
-    if (!isPlaying) {
+    if (isComplete) {
+      // If complete, restart from the beginning.
+      setIsComplete(false);
+      setCurrent(1);
+      setProgress(0);
+      setStarted(true);
+      setIsPlaying(true);
+    } else if (!isPlaying) {
       setStarted(true);
       setIsPlaying(true);
     } else {
@@ -154,7 +234,7 @@ export default function Quran() {
     }
   };
 
-  const resumeLabel = started && !isPlaying && current > 1;
+  const resumeLabel = started && !isPlaying && current > 1 && !isComplete;
 
   return (
     <section
@@ -194,37 +274,41 @@ export default function Quran() {
           </motion.div>
         </div>
 
-        {/* The reader — the application interface communicates everything */}
+        {/* The living Mushaf experience wrapper */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-          className="max-w-3xl mx-auto"
+          initial={{ opacity: 0, scale: 0.96, rotateX: 6 }}
+          whileInView={{ opacity: 1, scale: 1, rotateX: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+          className="max-w-2xl mx-auto MushafWrapper"
+          style={{ transformPerspective: 1200 }}
         >
-          <div className="relative bg-white/70 backdrop-blur-sm rounded-2xl border border-stone-200/60 overflow-hidden shadow-[0_20px_60px_-30px_rgba(28,25,23,0.2)]">
+          <div className="relative bg-[#FAFAFA] rounded border border-stone-200/50 shadow-[0_40px_100px_-40px_rgba(28,25,23,0.15)] overflow-hidden">
             {/* Reading progress — a thin line at the top */}
-            <div className="h-[3px] w-full bg-stone-100">
+            <div className="absolute top-0 left-0 h-[2px] w-full bg-stone-100 z-10">
               <motion.div
-                className="h-full bg-amber-600/80"
-                animate={{ width: `${overall}%` }}
+                className="h-full bg-[#C6A26B]"
+                animate={{ width: `${overallPercentage}%` }}
                 transition={{ duration: 0.4, ease: "linear" }}
               />
             </div>
 
-            <div className="p-8 md:p-12">
+            <div className="p-10 sm:p-16">
               {/* Surah header */}
-              <div className="flex items-baseline justify-between mb-10 pb-6 border-b border-stone-200/60">
+              <div className="flex items-baseline justify-between mb-16 pb-6 border-b border-stone-200/60">
                 <div>
-                  <p className="text-[10px] font-sans tracking-[0.2em] uppercase text-stone-400">
-                    Surah
-                  </p>
-                  <p className="font-serif text-2xl text-stone-900 mt-1">
-                    Al-Fatiha
-                  </p>
-                  <p className="text-[12px] font-sans text-stone-400 mt-0.5 italic">
-                    The Opening · 7 verses
-                  </p>
+                  <h3 className="font-serif text-2xl text-stone-900">
+                    Surah Al-Fatiha
+                  </h3>
+                  <div className="flex items-center gap-3 mt-1.5 text-[10px] font-sans text-stone-400 uppercase tracking-widest">
+                    <p>Alafasy</p>
+                    <span className="w-1 h-1 bg-stone-300 rounded-full" />
+                    <p className="tabular-nums">
+                      {isComplete
+                        ? "00:00"
+                        : `Ayah ${current} of ${ayahs.length}`}
+                    </p>
+                  </div>
                 </div>
                 <div className="flex items-center gap-4">
                   {/* Tajweed legend */}
@@ -238,113 +322,202 @@ export default function Quran() {
                       Ghunnah
                     </span>
                   </div>
-                  <button
-                    onClick={() => setShowTranslation((s) => !s)}
-                    className={`text-[10px] font-sans tracking-[0.12em] uppercase px-3 py-1.5 rounded-full border transition-colors duration-300 ${
-                      showTranslation
-                        ? "border-stone-300 text-stone-700 bg-stone-50"
-                        : "border-stone-200 text-stone-400"
-                    }`}
-                  >
-                    Translation
-                  </button>
+                  {/* Waveform and circular progress */}
+                  <div className="flex items-center gap-6">
+                    <Waveform isPlaying={isPlaying} />
+                    <CircularProgress percentage={overallPercentage} />
+                  </div>
                 </div>
               </div>
 
-              {/* Arabic — flowing, with tajweed highlighting; current ayah highlighted */}
-              <div dir="rtl" className="space-y-6">
-                {ayahs.map((a) => {
-                  const active = a.n === current;
-                  return (
-                    <div
-                      key={a.n}
-                      className={`rounded-xl px-4 py-3 -mx-4 transition-all duration-700 ${
-                        active && isPlaying
-                          ? "bg-amber-50/70"
-                          : "bg-transparent"
-                      }`}
-                    >
-                      <p
-                        className={`font-arabic leading-[2.1] transition-all duration-500 ${
-                          active
-                            ? "text-stone-900 text-[clamp(1.6rem,4vw,2.4rem)]"
-                            : "text-stone-700 text-[clamp(1.4rem,3.5vw,2rem)]"
-                        }`}
-                      >
-                        <Tajweed segments={a.segments} />
-                        <span className="inline-flex items-center justify-center w-7 h-7 mx-1 align-middle rounded-full border border-stone-300 text-[11px] font-sans text-stone-400 not-italic">
-                          {a.n}
-                        </span>
-                      </p>
-                      {showTranslation && (
-                        <p
-                          className={`font-serif italic font-light mt-2 transition-all duration-500 text-left ${
-                            active
-                              ? "text-stone-700 text-base"
-                              : "text-stone-400 text-sm"
-                          }`}
-                          dir="ltr"
-                        >
-                          {a.translation}
-                        </p>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
+              {/* ⭐ FIX 3: Content rendering with proper state transitions */}
+              <AnimatePresence mode="wait">
+                {!isComplete ? (
+                  /* Reading Interface */
+                  <motion.div
+                    key="reading"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0, filter: "blur(4px)" }}
+                    transition={{ duration: 0.6 }}
+                  >
+                    {/* Arabic with tajweed highlighting */}
+                    <div dir="rtl" className="space-y-6">
+                      {ayahs.map((a) => {
+                        const active = a.n === current && isPlaying;
+                        const visible =
+                          Math.abs(a.n - current) <= 1 || isComplete;
 
-              {/* Resume reading indicator */}
-              {resumeLabel && (
-                <motion.p
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="mt-6 text-center text-[11px] font-sans tracking-[0.15em] uppercase text-amber-700/70"
-                >
-                  Continue from Ayah {current}
-                </motion.p>
-              )}
+                        if (!visible) return null;
+
+                        return (
+                          <div
+                            key={a.n}
+                            className={`rounded-xl px-4 py-3 -mx-4 transition-all duration-700 ${
+                              active ? "bg-amber-50/70" : "bg-transparent"
+                            }`}
+                          >
+                            <p
+                              className={`font-arabic leading-[2.1] transition-all duration-500 ${
+                                active
+                                  ? "text-stone-900 text-[clamp(1.6rem,4vw,2.4rem)]"
+                                  : "text-stone-700 text-[clamp(1.4rem,3.5vw,2rem)]"
+                              }`}
+                            >
+                              <Tajweed segments={a.segments} />
+                              <span className="inline-flex items-center justify-center w-7 h-7 mx-1 align-middle rounded-full border border-stone-300 text-[11px] font-sans text-stone-400 not-italic">
+                                {a.n}
+                              </span>
+                            </p>
+                            {showTranslation && (
+                              <p
+                                className={`font-serif italic font-light mt-2 transition-all duration-500 text-left ${
+                                  active
+                                    ? "text-stone-700 text-base"
+                                    : "text-stone-400 text-sm"
+                                }`}
+                                dir="ltr"
+                              >
+                                {a.translation}
+                              </p>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    {/* Resume reading indicator */}
+                    {resumeLabel && (
+                      <motion.p
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="mt-10 text-center text-[11px] font-sans tracking-[0.15em] uppercase text-amber-700/70"
+                      >
+                        Continue from Ayah {current}
+                      </motion.p>
+                    )}
+                  </motion.div>
+                ) : (
+                  /* ⭐ Completion State UI (Was missing/broken previously) */
+                  <motion.div
+                    key="complete"
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+                    className="flex flex-col items-center justify-center py-16"
+                  >
+                    {/* Ring micro-interaction */}
+                    <div className="relative flex items-center justify-center w-16 h-16 mb-6">
+                      <motion.div
+                        initial={{ scale: 0, opacity: 0 }}
+                        animate={{ scale: [0, 1.2, 1], opacity: [0, 1, 0] }}
+                        transition={{ duration: 2.5, ease: "easeOut" }}
+                        className="absolute inset-0 rounded-full border border-[#C6A26B]"
+                      />
+                      <motion.div
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{
+                          type: "spring",
+                          stiffness: 100,
+                          damping: 20,
+                          delay: 0.4,
+                        }}
+                        className="w-10 h-10 rounded-full bg-stone-50 flex items-center justify-center border border-stone-200 text-[#C6A26B]"
+                      >
+                        <Check size={18} />
+                      </motion.div>
+                    </div>
+
+                    <h4 className="font-serif text-xl text-stone-900 mb-2">
+                      Surah Complete
+                    </h4>
+                    <p className="text-[11px] font-sans tracking-widest uppercase text-stone-400 mb-10">
+                      Alhamdulillah
+                    </p>
+
+                    <button
+                      onClick={toggle}
+                      className="text-[11px] font-sans text-stone-500 hover:text-stone-900 transition-colors uppercase tracking-widest border-b border-stone-300 pb-1"
+                    >
+                      Read Again
+                    </button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
 
             {/* Control bar — a calm premium audio experience */}
-            <div className="flex items-center justify-between gap-4 px-8 md:px-12 py-6 border-t border-stone-200/60 bg-stone-50/40">
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={toggle}
-                  className="w-12 h-12 rounded-full bg-stone-900 flex items-center justify-center text-stone-50 transition-all duration-300 hover:bg-stone-800 active:scale-95"
+            <div className="flex items-center justify-between gap-4 px-10 sm:px-16 py-6 border-t border-stone-200/60 bg-stone-50/40">
+              <button
+                onClick={toggle}
+                className="group relative inline-flex items-center gap-3 transition-colors duration-300"
+              >
+                {/* Breathe interaction */}
+                {isPlaying && !isComplete && (
+                  <motion.span
+                    className="absolute -inset-2 rounded-full border border-amber-600/20"
+                    animate={{ scale: [1, 1.3, 1], opacity: [0.6, 0, 0.6] }}
+                    transition={{
+                      duration: 3,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    }}
+                  />
+                )}
+                <div
+                  className="w-11 h-11 rounded-full bg-stone-900 flex items-center justify-center text-stone-50 transition-all duration-300 hover:bg-stone-800 active:scale-95 group-hover:scale-105"
                   aria-label={
-                    isPlaying ? "Pause recitation" : "Play recitation"
+                    isComplete
+                      ? "Restart recitation"
+                      : isPlaying
+                        ? "Pause recitation"
+                        : "Play recitation"
                   }
                 >
                   {isPlaying ? (
-                    <Pause size={18} />
+                    <Pause size={16} strokeWidth={2} />
                   ) : (
-                    <Play size={18} className="ml-0.5" />
+                    <Play size={16} strokeWidth={2} className="ml-0.5" />
                   )}
-                </button>
-                <div className="hidden sm:block">
-                  <p className="text-[11px] font-sans text-stone-500">
-                    {isPlaying
-                      ? "Reciting — Mishary Alafasy"
-                      : resumeLabel
-                        ? `Resume from Ayah ${current}`
-                        : "Begin recitation"}
+                </div>
+                <div className="hidden sm:block text-left">
+                  <p className="font-serif text-lg text-stone-900">
+                    {isComplete
+                      ? "Alhamdulillah"
+                      : isPlaying
+                        ? "Pause"
+                        : "Listen"}
                   </p>
-                  <p className="text-[10px] font-sans text-stone-400 mt-0.5 tracking-wide">
-                    Continuous · Tajweed · Translation
+                  <p className="text-[10px] font-sans text-stone-400 mt-0.5 uppercase tracking-wide">
+                    {isComplete
+                      ? "Surah Complete"
+                      : isPlaying
+                        ? `Ayah ${current}`
+                        : resumeLabel
+                          ? "Continue"
+                          : "Begin"}
                   </p>
                 </div>
+              </button>
+
+              <div className="flex items-center gap-6">
+                <button
+                  onClick={() => setShowTranslation((s) => !s)}
+                  className="text-[11px] font-sans text-stone-400 hover:text-stone-900 transition-colors"
+                >
+                  {showTranslation ? "Hide Translation" : "Show Translation"}
+                </button>
+                <div className="text-[11px] font-sans tracking-[0.12em] uppercase px-3 py-1.5 rounded-full border border-stone-200 text-stone-400">
+                  Tawfiq
+                </div>
               </div>
-              <p className="font-serif text-sm text-stone-500 tabular-nums">
-                Ayah <span className="text-stone-900">{current}</span> of{" "}
-                {ayahs.length}
-              </p>
             </div>
           </div>
 
-          <p className="text-center text-[11px] font-sans text-stone-400 mt-8 leading-relaxed max-w-md mx-auto">
+          <p className="text-center text-[11px] font-sans text-stone-400 mt-12 leading-relaxed max-w-md mx-auto">
             Press play to listen. The recitation flows verse by verse, lighting
-            each line as it is read. Close the app, and tomorrow it remembers
-            where you stopped.
+            each line as it is read. Tawfiq remembers exactly where you paused.
           </p>
         </motion.div>
       </div>
@@ -358,3 +531,4 @@ export default function Quran() {
     </section>
   );
 }
+  
