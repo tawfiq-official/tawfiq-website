@@ -105,7 +105,6 @@ const ayahs = [
 ];
 
 // Waveform component only animates when `isPlaying` is true.
-// Fixed to accept a prop to stop animation.
 const Waveform = ({ isPlaying }) => (
   <div className="flex items-end gap-[2px] h-3">
     {[...Array(16)].map((_, i) => (
@@ -183,7 +182,7 @@ export default function Quran() {
   const [isComplete, setIsComplete] = useState(false); // New state to handle full completion
   const audioRef = useRef(null);
 
-  // ⭐ FIX 1: Corrected calculation to hit 100% when fully complete.
+  // Corrected calculation to hit 100% when fully complete.
   const overallPercentage = isComplete
     ? 100
     : Math.min(((current - 1 + progress) / ayahs.length) * 100, 100);
@@ -199,7 +198,7 @@ export default function Quran() {
     }
   }, [isPlaying, current, isComplete]);
 
-  // ⭐ FIX 2: Corrected audio logic to properly halt waveform on complete.
+  // Corrected audio logic to properly halt waveform on complete.
   const handleEnded = () => {
     if (current < ayahs.length) {
       setProgress(0);
@@ -239,7 +238,7 @@ export default function Quran() {
   return (
     <section
       id="quran"
-      className="relative bg-[#F7F5F1] py-32 md:py-44 overflow-hidden"
+      className="relative bg-[#F7F5F1] py-24 md:py-32 overflow-hidden selection:bg-[#C6A26B] selection:text-white"
     >
       <div
         className="absolute inset-0 pointer-events-none"
@@ -249,31 +248,41 @@ export default function Quran() {
         }}
       />
 
-      <div className="relative max-w-[1400px] mx-auto px-6 lg:px-10">
-        {/* Header */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16 md:mb-20">
-          <div className="lg:col-span-3">
-            <p className="text-[11px] font-sans tracking-[0.2em] uppercase text-stone-400">
-              02 — Quran
-            </p>
-          </div>
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-            className="lg:col-span-9"
+      {/* 1. Header (Matches Qaza Layout and Size) */}
+      <div className="relative max-w-4xl mx-auto px-6 md:px-10 mb-24 md:mb-32 mt-12 md:mt-16">
+        <div className="md:pl-20 text-left">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, ease: "easeOut" }}
+            className="font-serif text-[clamp(2.5rem,6vw,5rem)] leading-[1.05] tracking-[-0.01em] text-stone-900"
           >
-            <h2 className="font-serif text-[clamp(2.25rem,5vw,4rem)] leading-[1.05] tracking-[-0.01em] text-stone-900">
-              Read the way
-              <br />
-              <span className="italic font-light text-stone-500">
-                it was meant to be read.
-              </span>
-            </h2>
+            Read the way
+            <br />
+            <span className="italic font-light text-stone-500">
+              it was meant to be read.
+            </span>
+          </motion.h2>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 0.2 }}
+            className="mt-10 md:mt-12 max-w-xl pl-5 border-l-[1.5px] border-stone-200"
+          >
+            <p className="font-serif text-[1.1rem] md:text-[1.2rem] text-stone-900 leading-[1.6]">
+              Experience the living Mushaf.
+            </p>
+            <p className="font-serif text-[15px] text-stone-500 mt-2 leading-[1.6]">
+              Read, listen, and reflect at your own pace. Tawfiq remembers where
+              you left off, highlights Tajweed as you recite, and keeps every
+              session connected to your journey.
+            </p>
           </motion.div>
         </div>
+      </div>
 
+      <div className="relative max-w-[1400px] mx-auto px-6 lg:px-10">
         {/* The living Mushaf experience wrapper */}
         <motion.div
           initial={{ opacity: 0, scale: 0.96, rotateX: 6 }}
@@ -330,7 +339,7 @@ export default function Quran() {
                 </div>
               </div>
 
-              {/* ⭐ FIX 3: Content rendering with proper state transitions */}
+              {/* Content rendering with proper state transitions */}
               <AnimatePresence mode="wait">
                 {!isComplete ? (
                   /* Reading Interface */
@@ -398,7 +407,7 @@ export default function Quran() {
                     )}
                   </motion.div>
                 ) : (
-                  /* ⭐ Completion State UI (Was missing/broken previously) */
+                  /* Completion State UI */
                   <motion.div
                     key="complete"
                     initial={{ opacity: 0, y: 15 }}
@@ -514,11 +523,6 @@ export default function Quran() {
               </div>
             </div>
           </div>
-
-          <p className="text-center text-[11px] font-sans text-stone-400 mt-12 leading-relaxed max-w-md mx-auto">
-            Press play to listen. The recitation flows verse by verse, lighting
-            each line as it is read. Tawfiq remembers exactly where you paused.
-          </p>
         </motion.div>
       </div>
 
@@ -531,4 +535,3 @@ export default function Quran() {
     </section>
   );
 }
-  
