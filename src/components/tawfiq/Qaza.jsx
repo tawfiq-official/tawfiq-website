@@ -1,87 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence, animate } from "framer-motion";
 
-// --- Minimalist SVG Icons for Prayer Times ---
-const FajrIcon = () => (
-  <svg
-    width="18"
-    height="18"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.5"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M12 2v6M8 4l2 2M16 4l-2 2M4 22h16M2 18h20M12 10a4 4 0 0 0-4 4h8a4 4 0 0 0-4-4z" />
-  </svg>
-);
-const DhuhrIcon = () => (
-  <svg
-    width="18"
-    height="18"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.5"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <circle cx="12" cy="12" r="4" />
-    <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
-  </svg>
-);
-const AsrIcon = () => (
-  <svg
-    width="18"
-    height="18"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.5"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M12 2v2M4.93 4.93l1.41 1.41M20 12h2M19.07 4.93l-1.41 1.41M15.9 14A4.5 4.5 0 0 0 7 15.3A4 4 0 0 0 7 23h9a5 5 0 0 0 5-5 4.5 4.5 0 0 0-5.1-4z" />
-  </svg>
-);
-const MaghribIcon = () => (
-  <svg
-    width="18"
-    height="18"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.5"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M12 10a4 4 0 0 0-4 4h8a4 4 0 0 0-4-4zM2 18h20M4 22h16M12 2L12 8M17 4L15 6M7 4L9 6" />
-  </svg>
-);
-const IshaIcon = () => (
-  <svg
-    width="18"
-    height="18"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.5"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-  </svg>
-);
-
-const ZERO_LEDGER = [
-  { name: "Fajr", owed: 0, icon: <FajrIcon /> },
-  { name: "Dhuhr", owed: 0, icon: <DhuhrIcon /> },
-  { name: "Asr", owed: 0, icon: <AsrIcon /> },
-  { name: "Maghrib", owed: 0, icon: <MaghribIcon /> },
-  { name: "Isha", owed: 0, icon: <IshaIcon /> },
-];
-
+const NAV_ITEMS = ["Qaza", "Quran", "Academy"];
 const ACCENT = "#C89A52";
 
 // Premium Number Animation Hook
@@ -95,7 +15,7 @@ function AnimatedNumber({ value }) {
     const currentVal = parseInt(node.textContent.replace(/,/g, "")) || 0;
 
     const controls = animate(currentVal, value, {
-      duration: 1.5, // Smooth duration for counting up from 0
+      duration: 1.5,
       ease: [0.22, 1, 0.36, 1],
       onUpdate(val) {
         node.textContent = Math.round(val).toLocaleString();
@@ -109,31 +29,47 @@ function AnimatedNumber({ value }) {
 }
 
 export default function Qaza() {
-  const [ledger, setLedger] = useState(ZERO_LEDGER);
-  const [showLedger, setShowLedger] = useState(false);
+  const [activeTab, setActiveTab] = useState(null);
 
   // App State
   const [hasEstimated, setHasEstimated] = useState(false);
-  const [startingTotal, setStartingTotal] = useState(0);
+  const [totalOwed, setTotalOwed] = useState(0);
 
   // Modal & Wizard State
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalStep, setModalStep] = useState(1);
 
-  const [gender, setGender] = useState(""); // "male" or "female"
+  const [gender, setGender] = useState("");
   const [pubertyAge, setPubertyAge] = useState(12);
   const [prayingAge, setPrayingAge] = useState(18);
   const [subtractMenses, setSubtractMenses] = useState(false);
-  const [frequency, setFrequency] = useState("rarely"); // rarely, occasionally, frequently
+  const [frequency, setFrequency] = useState("rarely");
 
-  const [toast, setToast] = useState({
-    visible: false,
-    message: "",
-    lastAction: null,
-  });
+  // Handle Scroll Spy Navigation
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 80) {
+        setActiveTab("Qaza");
+      } else {
+        setActiveTab(null);
+      }
+    };
 
-  const totalOwed = ledger.reduce((sum, p) => sum + p.owed, 0);
-  const totalRecovered = Math.max(0, startingTotal - totalOwed);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    if (isModalOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isModalOpen]);
 
   // --- Core Calculation Logic ---
   const getCalculatedDays = () => {
@@ -156,21 +92,16 @@ export default function Qaza() {
   const previewTotalPrayers = previewMissedDays * 5;
 
   const handleCommitEstimate = () => {
-    const totalMissedDays = getCalculatedDays();
-
-    const calculatedLedger = [
-      { name: "Fajr", owed: totalMissedDays, icon: <FajrIcon /> },
-      { name: "Dhuhr", owed: totalMissedDays, icon: <DhuhrIcon /> },
-      { name: "Asr", owed: totalMissedDays, icon: <AsrIcon /> },
-      { name: "Maghrib", owed: totalMissedDays, icon: <MaghribIcon /> },
-      { name: "Isha", owed: totalMissedDays, icon: <IshaIcon /> },
-    ];
-
-    setLedger(calculatedLedger);
-    setStartingTotal(totalMissedDays * 5);
+    setTotalOwed(previewTotalPrayers);
     setHasEstimated(true);
     setIsModalOpen(false);
-    setModalStep(1); // Reset for next time
+    setModalStep(1);
+
+    // Smooth scroll to the Qaza tracker section
+    const element = document.getElementById("qaza-tracker");
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
   };
 
   const calculateHorizon = () => {
@@ -182,53 +113,51 @@ export default function Qaza() {
     return date.toLocaleString("default", { month: "long", year: "numeric" });
   };
 
-  const logPrayer = (index) => {
-    if (ledger[index].owed === 0) return;
-
-    const previousLedger = [...ledger];
-    const prayerName = ledger[index].name;
-
-    setLedger((prev) =>
-      prev.map((p, i) =>
-        i === index ? { ...p, owed: Math.max(0, p.owed - 1) } : p,
-      ),
-    );
-
-    setToast({
-      visible: true,
-      message: `1 ${prayerName} offered.`,
-      lastAction: previousLedger,
-    });
-
-    setTimeout(() => {
-      setToast((prev) => ({ ...prev, visible: false }));
-    }, 4000);
-  };
-
-  const undoLastAction = () => {
-    if (toast.lastAction) {
-      setLedger(toast.lastAction);
-      setToast({ visible: false, message: "", lastAction: null });
-    }
-  };
-
   const resetCalculator = () => {
     setGender("");
     setPubertyAge(12);
     setPrayingAge(18);
     setSubtractMenses(false);
     setFrequency("rarely");
-    setLedger(ZERO_LEDGER);
-    setStartingTotal(0);
+    setTotalOwed(0);
     setHasEstimated(false);
     setModalStep(1);
     setIsModalOpen(false);
   };
 
   return (
-    <section className="relative bg-[#f9f7f2] min-h-screen py-24 md:py-32 overflow-hidden selection:bg-[#C89A52] selection:text-white">
+    <section className="relative bg-[#f9f7f2] h-auto pb-24 md:pb-32 overflow-hidden selection:bg-[#C89A52] selection:text-white">
+      {/* Forced CSS injection for custom scrollbars */}
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+        /* Chrome, Edge, Safari */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: #C8C1B6;
+            border-radius: 999px;
+            border: 2px solid #f9f7f2;
+            background-clip: padding-box; 
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background-color: #A99F90;
+        }
+        /* Firefox */
+        .custom-scrollbar {
+            scrollbar-width: thin;
+            scrollbar-color: #C8C1B6 transparent;
+        }
+        `,
+        }}
+      />
+
       {/* 1. Header */}
-      <div className="max-w-4xl mx-auto px-6 md:px-10 mb-24 md:mb-32">
+      <div className="max-w-4xl mx-auto px-6 md:px-10 mb-12 md:mb-16 mt-12 md:mt-16">
         <div className="md:pl-20 text-left">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -270,9 +199,12 @@ export default function Qaza() {
       </div>
 
       {/* 2. Narrower container for reading the journey */}
-      <div className="max-w-2xl mx-auto px-6 md:px-10">
+      <div
+        id="qaza-tracker"
+        className="max-w-2xl mx-auto px-6 md:px-10 scroll-mt-24"
+      >
         {/* The Big Picture (Macro) - Always visible */}
-        <div className="text-center mb-20">
+        <div className="text-center mb-16">
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -298,135 +230,19 @@ export default function Qaza() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
             >
-              {/* The Narrative */}
-              <div className="mb-16">
-                <div className="w-px h-12 bg-[#e0e0e0] mx-auto mb-10" />
-                <p className="font-serif text-[1.35rem] md:text-[1.5rem] text-[#1a1a1a] leading-[1.8] text-center max-w-lg mx-auto">
-                  You began this journey with approximately{" "}
-                  {startingTotal.toLocaleString()} prayers owed. Through the
-                  mercy of Allah, you have restored{" "}
-                  <span style={{ color: ACCENT }}>
-                    <AnimatedNumber value={totalRecovered} />
-                  </span>
-                  .<br />
-                  <br />
-                  You are moving forward.
-                </p>
-              </div>
-
-              {/* The Horizon */}
-              <div className="mb-24 text-center">
+              {/* Functional Horizon moved perfectly below the big number */}
+              <div className="mb-16 text-center">
                 <p className="font-serif text-[1.1rem] md:text-[1.25rem] text-[#8a8a8a] leading-relaxed max-w-md mx-auto italic">
-                  At your current pace, you will complete this journey in{" "}
-                  {calculateHorizon()}.
+                  At your current pace, you will complete this journey
+                  <br />
+                  in {calculateHorizon()}.
                 </p>
                 <div className="w-px h-12 bg-[#e0e0e0] mx-auto mt-10" />
-              </div>
-
-              {/* The Action (Logging Grid) */}
-              <div className="mb-24">
-                <p className="text-[10px] font-sans uppercase tracking-[0.2em] text-[#9d9d9d] text-center mb-8">
-                  What did you restore today?
-                </p>
-                <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-                  {ledger.map((prayer, i) => (
-                    <button
-                      key={prayer.name}
-                      onClick={() => logPrayer(i)}
-                      disabled={prayer.owed === 0}
-                      className={`group relative flex flex-col items-center justify-center gap-3 p-5 md:p-6 bg-white/40 border border-[#e0e0e0] rounded-2xl transition-all duration-300 ${prayer.owed > 0 ? "hover:bg-white hover:border-[#C89A52] hover:shadow-sm active:scale-95 cursor-pointer" : "opacity-50 cursor-not-allowed"}`}
-                    >
-                      <div
-                        className={`text-[#8a8a8a] ${prayer.owed > 0 ? "group-hover:text-[#C89A52]" : ""} transition-colors`}
-                      >
-                        {prayer.icon}
-                      </div>
-                      <span className="font-serif text-[1.1rem] text-[#1a1a1a]">
-                        {prayer.name}
-                      </span>
-                    </button>
-                  ))}
-                </div>
-                <p className="text-[11px] font-sans text-[#8a8a8a] text-center mt-6">
-                  Tap a prayer to record one offering.
-                </p>
-              </div>
-
-              {/* The Breakdown (Collapsible Ledger) */}
-              <div className="text-center">
-                <button
-                  onClick={() => setShowLedger(!showLedger)}
-                  className="text-[10px] font-sans uppercase tracking-[0.2em] text-[#9d9d9d] hover:text-[#1a1a1a] transition-colors flex items-center gap-2 mx-auto"
-                >
-                  {showLedger ? "Hide Detailed Ledger" : "View Detailed Ledger"}
-                  <motion.svg
-                    animate={{ rotate: showLedger ? 180 : 0 }}
-                    width="10"
-                    height="10"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <polyline points="6 9 12 15 18 9"></polyline>
-                  </motion.svg>
-                </button>
-
-                <AnimatePresence>
-                  {showLedger && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: "auto" }}
-                      exit={{ opacity: 0, height: 0 }}
-                      className="overflow-hidden mt-8 text-left border-t border-[#e0e0e0]"
-                    >
-                      {ledger.map((entry) => (
-                        <div
-                          key={entry.name}
-                          className="flex items-center justify-between py-4 border-b border-[#e0e0e0]/50"
-                        >
-                          <div className="flex items-center gap-4">
-                            <span className="text-[#bfbab3]">{entry.icon}</span>
-                            <span className="font-serif text-lg text-[#1a1917]">
-                              {entry.name}
-                            </span>
-                          </div>
-                          <span className="font-serif text-xl text-[#8a8a8a] tabular-nums">
-                            <AnimatedNumber value={entry.owed} />
-                          </span>
-                        </div>
-                      ))}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
               </div>
             </motion.div>
           )}
         </AnimatePresence>
       </div>
-
-      {/* Undo Notification Toast */}
-      <AnimatePresence>
-        {toast.visible && (
-          <motion.div
-            initial={{ opacity: 0, y: 50, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            className="fixed bottom-10 left-1/2 -translate-x-1/2 bg-[#1a1a1a] text-white px-6 py-3 rounded-full shadow-lg flex items-center gap-4 z-50"
-          >
-            <span className="font-serif text-sm italic">{toast.message}</span>
-            <div className="w-px h-4 bg-white/20" />
-            <button
-              onClick={undoLastAction}
-              className="text-[10px] font-sans uppercase tracking-widest text-[#C89A52] hover:text-white transition-colors"
-            >
-              Undo
-            </button>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       {/* Luxury Editorial Modal (2-Step Wizard) */}
       <AnimatePresence>
@@ -446,7 +262,7 @@ export default function Qaza() {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 20, scale: 0.95 }}
                 transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                className="bg-[#f9f7f2] border border-[#e0e0e0] w-full max-w-[28rem] p-8 md:p-12 shadow-2xl relative pointer-events-auto text-left flex flex-col max-h-[90vh] overflow-y-auto"
+                className="custom-scrollbar bg-[#f9f7f2] border border-[#e0e0e0] w-full max-w-[28rem] p-8 md:p-12 shadow-2xl relative pointer-events-auto text-left flex flex-col max-h-[90vh] overflow-y-auto"
                 style={{ borderRadius: "0px" }}
               >
                 <button
