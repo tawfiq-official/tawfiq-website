@@ -159,17 +159,7 @@ export default function Hero() {
                 transition={{ duration: 1.5, delay: 1.2 }}
                 className="mt-16 flex flex-wrap items-center gap-3 sm:gap-4 text-[10px] sm:text-[11px] font-sans tracking-[0.15em] uppercase text-stone-400"
               >
-                <span>Prayer</span>
-                <span className="w-1 h-1 rounded-full bg-stone-300" />
-                <span>Quran</span>
-                <span className="w-1 h-1 rounded-full bg-stone-300" />
-                <span>Qaza</span>
-                <span className="w-1 h-1 rounded-full bg-stone-300" />
-                <span>Academy</span>
-                <span className="w-1 h-1 rounded-full bg-stone-300" />
-                <span>Dhikr</span>
-                <span className="w-1 h-1 rounded-full bg-stone-300" />
-                <span>AI Companion</span>
+                
               </motion.div>
             </div>
 
