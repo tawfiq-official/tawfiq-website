@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import PrayerClock from "./PrayerClock";
+// import PrayerClock from "./PrayerClock";
 import ComingSoon from "./ComingSoon";
 
 export default function Hero() {
