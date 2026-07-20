@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import GlassOrb from "./GlassOrb";
-import ComingSoon from "./ComingSoon"; // 1. Import your new component
+import PrayerClock from "./PrayerClock";
+import ComingSoon from "./ComingSoon";
 
 export default function Hero() {
-  // 2. Add state to manage the modal visibility
   const [isDemoOpen, setIsDemoOpen] = useState(false);
 
   return (
@@ -31,18 +30,39 @@ export default function Hero() {
           </div>
         </div>
 
-        <div className="relative max-w-[1400px] mx-auto px-6 lg:px-10 w-full pt-24 pb-16">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-2 items-center">
+        <div className="relative max-w-[1400px] mx-auto px-5 sm:px-6 lg:px-10 w-full pt-28 pb-14 lg:pt-24 lg:pb-16">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-9 lg:gap-5 items-center">
             {/* Left — Text Section */}
-            <div className="lg:col-span-7 order-1 lg:order-1 lg:pr-6">
-              <motion.p
+            <div className="lg:col-span-6 xl:col-span-5 order-1 lg:order-1 lg:pr-6 z-10">
+              {/* Eyebrow text with the MOVING Tag */}
+              <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 1.5, delay: 0.3 }}
-                className="text-[11px] font-sans tracking-[0.25em] uppercase text-stone-400 mb-8"
+                className="flex flex-wrap items-center gap-3 sm:gap-4 mb-8"
               >
-                Built for Muslims seeking consistency.
-              </motion.p>
+                <p className="text-[10px] sm:text-[11px] font-sans tracking-[0.25em] uppercase text-stone-400 mt-1">
+                  Built for Muslims seeking consistency.
+                </p>
+
+                <div className="relative inline-flex overflow-hidden rounded-full p-[1px] shadow-[0_2px_10px_rgba(0,0,0,0.03)]">
+                  {/* The continuously spinning gold light */}
+                  <span className="absolute inset-[-1000%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,rgba(198,162,107,0.1)_0%,rgba(198,162,107,0.8)_50%,rgba(198,162,107,0.1)_100%)]" />
+
+                  {/* The inner pill */}
+                  <div className="relative inline-flex items-center gap-2 h-full w-full bg-[#FDFCFB] px-3 py-1.5 rounded-full">
+                    {/* Tiny pulsing dot for extra aliveness */}
+                    <span className="relative flex h-1.5 w-1.5 ml-0.5">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#C6A26B] opacity-60"></span>
+                      <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#C6A26B]"></span>
+                    </span>
+
+                    <span className="text-[8px] sm:text-[9px] font-sans tracking-[0.15em] uppercase text-stone-500 font-medium mt-[1px] mr-1">
+                      Currently Evolving
+                    </span>
+                  </div>
+                </div>
+              </motion.div>
 
               <motion.h1
                 initial={{ opacity: 0, y: 30 }}
@@ -121,7 +141,7 @@ export default function Hero() {
                   <span className="w-0 group-hover:w-5 h-px bg-stone-900 transition-all duration-500" />
                 </a>
 
-                {/* 3. Watch Demo Button (Triggers state with Expanding Hover Animation) */}
+                {/* Watch Demo Button */}
                 <button
                   onClick={() => setIsDemoOpen(true)}
                   className="group relative flex items-center h-12 pl-1 pr-6 rounded-full cursor-pointer transition-all duration-500 focus:outline-none"
@@ -129,7 +149,7 @@ export default function Hero() {
                   {/* Expanding Gold Background */}
                   <div className="absolute left-0 top-0 bottom-0 w-12 bg-[#C6A26B] rounded-full opacity-0 transition-all duration-500 ease-[0.22,1,0.36,1] group-hover:w-full group-hover:opacity-100" />
 
-                  {/* Static Border (Fades and shrinks away on hover) */}
+                  {/* Static Border */}
                   <div className="absolute left-1 top-1 w-10 h-10 border border-stone-300 rounded-full transition-all duration-500 group-hover:opacity-0 group-hover:scale-75" />
 
                   {/* Play Icon */}
@@ -151,43 +171,25 @@ export default function Hero() {
                   </span>
                 </button>
               </motion.div>
-
-              {/* Trust Row */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 1.5, delay: 1.2 }}
-                className="mt-16 flex flex-wrap items-center gap-3 sm:gap-4 text-[10px] sm:text-[11px] font-sans tracking-[0.15em] uppercase text-stone-400"
-              >
-                
-              </motion.div>
             </div>
 
-            {/* Right — Glass Orb Section */}
+            {/* Right — The premium PrayerClock */}
             <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: [0, -6, 0], rotate: [-0.6, 0.6, -0.6] }}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{
-                opacity: { duration: 1.4, delay: 0.4 },
-                y: {
-                  delay: 1.8,
-                  duration: 6,
-                  repeat: Infinity,
-                  repeatType: "mirror",
-                  ease: "easeInOut",
-                },
+                duration: 1.4,
+                delay: 0.4,
+                ease: [0.22, 1, 0.36, 1],
               }}
-              className="lg:col-span-5 order-2 lg:order-2 flex justify-center lg:-ml-8"
+              className="lg:col-span-6 xl:col-span-7 order-2 lg:order-2 flex justify-center items-center w-full min-h-[400px] lg:min-h-[600px] relative z-0 mt-8 lg:mt-0"
             >
-              <div className="flex justify-center items-center w-[320px] h-[320px] sm:w-[420px] sm:h-[420px] lg:w-[520px] lg:h-[520px] scale-[0.65] sm:scale-75 lg:scale-100 origin-center">
-                <GlassOrb />
-              </div>
+              <PrayerClock />
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* 4. Render the modal component */}
       <ComingSoon isOpen={isDemoOpen} onClose={() => setIsDemoOpen(false)} />
     </>
   );
