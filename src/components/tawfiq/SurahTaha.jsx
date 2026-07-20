@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 
 export default function SurahAshSharh() {
   return (
-    <section className="relative bg-[#FAFAFA] py-40 md:py-56 overflow-hidden">
+    <section className="relative bg-[#F7F5F1] py-40 md:py-56 overflow-hidden">
       <div className="relative max-w-3xl mx-auto px-6 text-center">
         {/* Eyebrow Label */}
         <motion.p

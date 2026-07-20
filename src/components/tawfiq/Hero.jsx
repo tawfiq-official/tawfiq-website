@@ -7,7 +7,7 @@ export default function Hero() {
 
   return (
     <>
-      <section className="relative min-h-screen bg-[#F7F5F1] overflow-hidden flex items-center">
+      <section className="relative min-h-[92svh] lg:min-h-screen bg-[#F7F5F1] overflow-hidden flex items-center">
         {/* Single source of natural light */}
         <div
           className="absolute inset-0 pointer-events-none"
@@ -29,7 +29,27 @@ export default function Hero() {
           </div>
         </div>
 
-        <div className="relative max-w-[1400px] mx-auto px-5 sm:px-6 lg:px-10 w-full pt-28 pb-14 lg:pt-24 lg:pb-16">
+        <div
+          className="
+    relative
+    max-w-[1400px]
+    mx-auto
+    w-full
+
+    px-6
+    sm:px-8
+    lg:px-10
+
+    pt-24
+    pb-10
+
+    sm:pt-28
+    sm:pb-14
+
+    lg:pt-24
+    lg:pb-16
+  "
+        >
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-9 lg:gap-5 items-center">
             {/* Left — Text Section */}
             <div className="lg:col-span-6 xl:col-span-5 order-1 lg:order-1 lg:pr-6 z-10">
@@ -38,15 +58,22 @@ export default function Hero() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 1.5, delay: 0.3 }}
-                className="flex flex-wrap items-center gap-3 sm:gap-4 mb-8"
+                className="
+flex
+flex-wrap
+items-center
+gap-3
+sm:gap-4
+mb-6
+"
               >
                 <p className="text-[10px] sm:text-[11px] font-sans tracking-[0.25em] uppercase text-stone-400 mt-1">
                   Built for Muslims seeking consistency.
                 </p>
 
-                <div className="relative inline-flex overflow-hidden rounded-full p-[1px] shadow-[0_2px_10px_rgba(0,0,0,0.03)]">
+                <div className="relative inline-flex overflow-hidden rounded-full p-[1px] border border-[#E7DDCF]">
                   {/* The continuously spinning gold light */}
-                  <span className="absolute inset-[-1000%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,rgba(198,162,107,0.1)_0%,rgba(198,162,107,0.8)_50%,rgba(198,162,107,0.1)_100%)]" />
+                  <span className="absolute inset-[-1000%] animate-[spin_12s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,rgba(198,162,107,0.1)_0%,rgba(198,162,107,0.8)_50%,rgba(198,162,107,0.1)_100%)]" />
 
                   {/* The inner pill */}
                   <div className="relative inline-flex items-center gap-2 h-full w-full bg-[#FDFCFB] px-3 py-1.5 rounded-full">
@@ -71,7 +98,10 @@ export default function Hero() {
                   ease: [0.22, 1, 0.36, 1],
                   delay: 0.15,
                 }}
-                className="font-serif text-[clamp(3.2rem,8.5vw,7.8rem)] leading-[0.92] tracking-[-0.03em] text-stone-900"
+                className="font-serif text-[3.6rem]
+sm:text-[4.5rem]
+md:text-[5.5rem]
+lg:text-[clamp(5rem,7vw,7.8rem)]leading-[0.92] tracking-[-0.03em] text-stone-900"
               >
                 <span className="block">Become consistent.</span>
                 <span className="block italic font-light text-stone-500">
@@ -86,7 +116,16 @@ export default function Hero() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 1.5, delay: 0.7 }}
-                className="mt-8 max-w-lg text-[16px] md:text-[17px] font-sans text-stone-500 leading-relaxed"
+                className="
+mt-6
+max-w-[34ch]
+text-[15px]
+sm:text-[16px]
+lg:text-[17px]
+font-sans
+text-stone-500
+leading-relaxed
+"
               >
                 Track every prayer, reduce your Qaza, read the Quran, learn
                 Islam, and grow closer to Allah with one calm, beautiful
@@ -97,7 +136,7 @@ export default function Hero() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 1.5, delay: 1 }}
-                className="mt-14 flex flex-wrap items-center gap-8"
+                className=" flex flex-wrap items-center gap-8"
               >
                 {/* Primary CTA */}
                 <a
