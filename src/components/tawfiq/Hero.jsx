@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-// import PrayerClock from "./PrayerClock";
 import ComingSoon from "./ComingSoon";
 
 export default function Hero() {
@@ -172,20 +171,6 @@ export default function Hero() {
                 </button>
               </motion.div>
             </div>
-
-            {/* Right — The premium PrayerClock */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{
-                duration: 1.4,
-                delay: 0.4,
-                ease: [0.22, 1, 0.36, 1],
-              }}
-              className="lg:col-span-6 xl:col-span-7 order-2 lg:order-2 flex justify-center items-center w-full min-h-[400px] lg:min-h-[600px] relative z-0 mt-8 lg:mt-0"
-            >
-              <PrayerClock />
-            </motion.div>
           </div>
         </div>
       </section>
