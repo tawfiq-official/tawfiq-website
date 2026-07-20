@@ -126,7 +126,7 @@ export default function Footer() {
           </Link>
 
           <a
-            href="mailto:hello@tawfiq.app"
+            href="mailto:tawfiq.base44@gmail.com"
             className="transition-all duration-300 hover:text-[#1B140F]"
           >
             Support
