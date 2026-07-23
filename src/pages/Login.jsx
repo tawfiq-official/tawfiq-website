@@ -17,9 +17,25 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+
+    const cleanEmail = email.trim();
+
+    // 1. Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(cleanEmail)) {
+      setError("Please enter a valid email address");
+      return;
+    }
+
+    // 2. Ensure password is provided
+    if (!password) {
+      setError("Please enter your password");
+      return;
+    }
+
     setLoading(true);
     try {
-      await base44.auth.loginViaEmailPassword(email, password);
+      await base44.auth.loginViaEmailPassword(cleanEmail, password);
       window.location.href = "/";
     } catch (err) {
       setError(err.message || "Invalid email or password");
